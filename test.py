@@ -3,8 +3,11 @@ import json
 import os
 import jsonpickle
 from sys import path
+from sys import platform
 
-path.append("/usr/src/mytonctrl/")
+srcDir = "/usr/local/src/" if platform == "darwin" else "/usr/src/"
+
+path.append(srcDir + "mytonctrl/")
 from mytoncore import Block, Trans, Message
 
 url = "https://127.0.0.1:54358/"

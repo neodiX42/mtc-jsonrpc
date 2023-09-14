@@ -17,7 +17,11 @@ ip=$1
 port=$2
 localport=$(($port-1))
 workdir=$3
-root="/usr/src/mtc-jsonrpc"
+if [[ "$OSTYPE" =~ darwin.* ]]; then
+  root="/usr/local/src/mtc-jsonrpc"
+else
+  root="/usr/src/mtc-jsonrpc"
+fi
 block="/etc/nginx/sites-available/mtc-jsonrpc"
 
 [ -f block ] && rm block

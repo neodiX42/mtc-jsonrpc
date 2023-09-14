@@ -18,8 +18,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from jsonrpc import JSONRPCResponseManager, dispatcher
 from jsonrpc.jsonrpc import JSONRPCRequest
 from jsonrpc.exceptions import JSONRPCDispatchException
+from sys import platform
 
-path.append("/usr/src/mytonctrl/")
+srcDir = "/usr/local/src/" if platform == "darwin" else "/usr/src/"
+
+path.append(srcDir + "mytonctrl/")
 from mytoncore import *
 
 local = MyPyClass(__file__)
@@ -425,8 +428,8 @@ def GetTrans(trans):
 
 @dispatcher.add_method
 def CheckUpdates():
-	gitPath1 = "/usr/src/mytonctrl/"
-	gitPath2 = "/usr/src/mtc-jsonrpc/"
+	gitPath1 = srcDir + "mytonctrl/"
+	gitPath2 = srcDir + "mtc-jsonrpc/"
 	result1 = CheckGitUpdate(gitPath1)
 	result2 = CheckGitUpdate(gitPath2)
 	result = [result1, result2]
@@ -554,7 +557,7 @@ def SetWebPassword():
 		make_ssl_devcert(sslKeyPath, host=ip)
 	#end if
 
-	runArgs = ["bash", "/usr/src/mtc-jsonrpc/setupProxy.sh", str(allowedIP), str(port), local.buffer["myWorkDir"]]
+	runArgs = ["bash", srcDir + "mtc-jsonrpc/setupProxy.sh", str(allowedIP), str(port), local.buffer["myWorkDir"]]
 	exitCode = RunAsRoot(runArgs)
 
 	print("Configuration complete.")
