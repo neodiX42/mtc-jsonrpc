@@ -479,7 +479,7 @@ def GetOTPStatus():
 def SetupOTP():
 	global ip
 	ip.CheckAccess()
-	local.AddLog("start SetupOTP function", "debug")
+	local.add_log("start SetupOTP function", "debug")
 	otpStatus = ton.GetSettings("jsonrpcOTP")
 	if otpStatus:
 		return "OTP already configured"
@@ -531,7 +531,7 @@ def SetArgsByArgs(runArgs, args):
 #end define
 
 def SetWebPassword():
-	local.AddLog("start SetWebPassword function", "debug")
+	local.add_log("start SetWebPassword function", "debug")
 	port = GetPort()
 	ip = requests.get("https://ifconfig.me").text
 	url = "https://{ip}:{port}/".format(ip=ip, port=port)
