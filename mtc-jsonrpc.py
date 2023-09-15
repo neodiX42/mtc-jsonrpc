@@ -549,7 +549,7 @@ def SetWebPassword():
 	allowedIP = data_json[0]
 
 	ip = "0.0.0.0"
-	sslKeyPath = local.buffer["myWorkDir"] + "ssl"
+	sslKeyPath = local.buffer.my_work_dir + "ssl"
 	crtPath = sslKeyPath + ".crt"
 	keyPath = sslKeyPath + ".key"
 
@@ -557,7 +557,7 @@ def SetWebPassword():
 		make_ssl_devcert(sslKeyPath, host=ip)
 	#end if
 
-	runArgs = ["bash", srcDir + "mtc-jsonrpc/setupProxy.sh", str(allowedIP), str(port), local.buffer["myWorkDir"]]
+	runArgs = ["bash", srcDir + "mtc-jsonrpc/setupProxy.sh", str(allowedIP), str(port), local.buffer.my_work_dir]
 	exitCode = RunAsRoot(runArgs)
 
 	print("Configuration complete.")
@@ -590,7 +590,7 @@ def Init():
 	hostip = "127.0.0.1"
 
 	ip = "0.0.0.0"
-	sslKeyPath = local.buffer["myWorkDir"] + "ssl"
+	sslKeyPath = local.buffer.my_work_dir + "ssl"
 	crtPath = sslKeyPath + ".crt"
 	keyPath = sslKeyPath + ".key"
 
