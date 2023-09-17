@@ -3,3 +3,7 @@
 .idea/*
 __pycache__/
 test.py
+**/misc.xml
+**/vcs.xml
+**/modules.xml
+**/mtc-jsonrpc-neodix.iml

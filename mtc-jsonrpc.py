@@ -442,7 +442,7 @@ def UpdateMtc(args):
 	ip.CheckAccess()
 	runArgs = ["bash", "/usr/src/mytonctrl/scripts/update.sh"]
 	runArgs = SetArgsByArgs(runArgs, args)
-	exitCode = RunAsRoot(runArgs)
+	exitCode = run_as_root(runArgs)
 	if exitCode == 0:
 		text = "Update - {green}OK{endc}"
 	else:
@@ -458,7 +458,7 @@ def UpdateJR(args):
 	runArgs = ["bash", "/usr/src/mtc-jsonrpc/update.sh"]
 	runArgs = SetArgsByArgs(runArgs, args)
 
-	exitCode = RunAsRoot(runArgs)
+	exitCode = run_as_root(runArgs)
 	if exitCode == 0:
 		text = "Update - {green}OK{endc}"
 	else:
@@ -558,7 +558,7 @@ def SetWebPassword():
 	#end if
 
 	runArgs = ["bash", srcDir + "mtc-jsonrpc/setupProxy.sh", str(allowedIP), str(port), local.buffer.my_work_dir]
-	exitCode = RunAsRoot(runArgs)
+	exitCode = run_as_root(runArgs)
 
 	print("Configuration complete.")
 	print("Now you can go to https://tonadmin.org")
