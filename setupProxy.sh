@@ -7,10 +7,13 @@ fi
 # Install nginx proxy_pass
 
 # Checking package
-
-if [ $(dpkg-query -W -f='${Status}' nginx 2>/dev/null | grep -c "ok installed") -eq 0 ];
-then
-  apt-get install nginx;
+if [[ "$OSTYPE" =~ darwin.* ]]; then
+	su $SUDO_USER -c "brew install nginx"
+else
+  if [ $(dpkg-query -W -f='${Status}' nginx 2>/dev/null | grep -c "ok installed") -eq 0 ];
+  then
+    apt-get install nginx;
+  fi
 fi
 
 ip=$1
@@ -18,11 +21,14 @@ port=$2
 localport=$(($port-1))
 workdir=$3
 if [[ "$OSTYPE" =~ darwin.* ]]; then
+  mkdir -p /opt/homebrew/etc/nginx/sites-{enabled,available}
   root="/usr/local/src/mtc-jsonrpc"
+  block="/opt/homebrew/etc/nginx/sites-available/mtc-jsonrpc"
 else
   root="/usr/src/mtc-jsonrpc"
+  block="/etc/nginx/sites-available/mtc-jsonrpc"
 fi
-block="/etc/nginx/sites-available/mtc-jsonrpc"
+
 
 [ -f block ] && rm block
 
@@ -55,8 +61,14 @@ server {
 }
 EOF
 
-# Link to make it available
-[ ! -L "/etc/nginx/sites-enabled/mtc-jsonrpc" ] && ln -s $block /etc/nginx/sites-enabled/
-
-# Test configuration and reload if successful
-nginx -t && service nginx restart
+if [[ "$OSTYPE" =~ darwin.* ]]; then
+  # Link to make it available
+  [ ! -L "/opt/homebrew/etc/nginx/sites-enabled/mtc-jsonrpc" ] && ln -s $block /opt/homebrew/etc/nginx/sites-enabled/
+  # Test configuration and reload if successful
+  nginx -t && brew services reload nginx
+else
+  # Link to make it available
+  [ ! -L "/etc/nginx/sites-enabled/mtc-jsonrpc" ] && ln -s $block /etc/nginx/sites-enabled/
+  # Test configuration and reload if successful
+  nginx -t && service nginx restart
+fi
