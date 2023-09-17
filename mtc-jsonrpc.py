@@ -19,6 +19,7 @@ from jsonrpc import JSONRPCResponseManager, dispatcher
 from jsonrpc.jsonrpc import JSONRPCRequest
 from jsonrpc.exceptions import JSONRPCDispatchException
 from sys import platform
+import signal
 
 srcDir = "/usr/local/src/" if platform == "darwin" else "/usr/src/"
 
@@ -27,6 +28,10 @@ from mytoncore import *
 
 local = MyPyClass(__file__)
 ton = MyTonCore()
+
+def timeout(signum, frame):
+	print('Timeout!')
+	exit()
 
 class IP:
 	def __init__(self, addr):
@@ -535,8 +540,12 @@ def SetWebPassword():
 	port = GetPort()
 	ip = requests.get("https://ifconfig.me").text
 	url = "https://{ip}:{port}/".format(ip=ip, port=port)
+	signal.alarm(10)
 	passwd = getpass.getpass("Set a new password for the web admin panel: ")
+	signal.alarm(0)
+	signal.alarm(10)
 	repasswd = getpass.getpass("Repeat password: ")
+	signal.alarm(0)
 	if passwd != repasswd:
 		print("Error: Password mismatch")
 		return
@@ -607,5 +616,6 @@ def Init():
 ###
 
 if __name__ == "__main__":
+	signal.signal(signal.SIGALRM, timeout)
 	Init()
 #end if

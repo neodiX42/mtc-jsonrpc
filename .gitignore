@@ -1,6 +1,5 @@
 *.DS_Store
 .idea/
-.idea/*
 __pycache__/
 test.py
 **/misc.xml
